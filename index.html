@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>بەفرین شوب</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 20px;
+        }
+
+        header {
+            text-align: center;
+            font-size: 2rem;
+            color: white;
+            text-shadow: 0px 0px 15px rgba(255, 255, 255, 0.8);
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .main-container {
+            width: 90%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: white;
+            text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.7);
+        }
+
+        textarea, input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+            color: #1e3c72;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+            box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .prizes-container {
+            background: rgba(0, 68, 204, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        ul li {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #1e3c72;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            flex: 1 1 calc(50% - 10px);
+            position: relative;
+        }
+
+        ul li .remove-btn {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 0.6rem;
+            padding: 2px;
+            cursor: pointer;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .countdown {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.7);
+            text-align: center;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .winner-display {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0px 0px 20px rgba(255, 255, 255, 0.7), 0px 0px 40px rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+
+        footer {
+            margin-top: auto;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #fff;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        بەفرین شوب <span>❄️</span>
+    </header>
+    <div class="main-container">
+        <h2>📋 ناڤێن پشكدارا</h2>
+        <textarea id="names" rows="4" placeholder="ناڤێن ئامادەکەر بنڤێسە..."></textarea>
+        <input type="text" id="newPrize" placeholder="ناڤێ دياريێ زیدةبكە">
+        <button onclick="addPrize()">+ زێدەکرنا دياريێ</button>
+        <div class="prizes-container">
+            <ul id="prizesList"></ul>
+        </div>
+        <button onclick="startSelection()">ھەلبژارتن</button>
+        <div id="countdown" class="countdown"></div>
+        <div id="winnerDisplay" class="winner-display"></div>
+        <button onclick="downloadWinners()">📂 داونلودكرنا ناڤێ سەركەفتيا</button>
+        <div class="list-container">
+            <ul id="winnersList"></ul>
+        </div>
+    </div>
+    <footer>
+        Ⓒ 2024 Mr Hamko. All Rights Reserved.
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        const prizes = [];
+        const winners = [];
+        const usedNames = new Set();
+        const secretNames = ['هلبين', 'hlben', 'hlbin', 'hlbo', 'helbin', 'Helbin'];
+        const extraMessages = ['I win your love ❤️', 'Thnx For All the Energy ❤️', 'My Only LoVe ❤️', 'Hilben :) ❤️'];
+
+        function addPrize() {
+            const prizeInput = document.getElementById('newPrize');
+            const prizeName = prizeInput.value.trim();
+            if (prizeName) {
+                prizes.push(prizeName);
+                updatePrizesList();
+                prizeInput.value = '';
+            } else {
+                alert('تکایە ناڤێ خوایاندنێ بنڤێسە!');
+            }
+        }
+
+        function updatePrizesList() {
+            const prizesListDiv = document.getElementById('prizesList');
+            prizesListDiv.innerHTML = '';
+            prizes.forEach((prize, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = prize;
+
+                const removeBtn = document.createElement('button');
+                removeBtn.textContent = 'x';
+                removeBtn.className = 'remove-btn';
+                removeBtn.onclick = () => {
+                    prizes.splice(index, 1);
+                    updatePrizesList();
+                };
+
+                listItem.appendChild(removeBtn);
+                prizesListDiv.appendChild(listItem);
+            });
+        }
+
+        function startSelection() {
+            const namesTextarea = document.getElementById('names');
+            const names = namesTextarea.value.trim().split('\n').filter(name => name.trim() !== '');
+            const availableNames = names.filter(name => !usedNames.has(name));
+
+            if (availableNames.length === 0 || prizes.length === 0) {
+                alert('تکایە ناڤێن ئامادەکەر و خوایاندنێ زیاد بکه!');
+                return;
+            }
+
+            let countdown = 5;
+            const countdownDiv = document.getElementById('countdown');
+            countdownDiv.style.display = 'block';
+            countdownDiv.textContent = countdown;
+
+            const interval = setInterval(() => {
+                countdown -= 1;
+                countdownDiv.textContent = countdown;
+
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    countdownDiv.style.display = 'none';
+
+                    const winnerDisplayDiv = document.getElementById('winnerDisplay');
+                    winnerDisplayDiv.innerHTML = '';
+                    const selectedName = names.find(name => secretNames.includes(name));
+                    if (selectedName) {
+                        winnerDisplayDiv.style.display = 'block';
+                        displayMessages(winnerDisplayDiv, ['Mr Love Your Eyes ❤️', ...extraMessages]);
+                        launchHearts();
+                    } else {
+                        const winnerName = availableNames[Math.floor(Math.random() * availableNames.length)];
+                        const selectedPrize = prizes[Math.floor(Math.random() * prizes.length)];
+                        winnerDisplayDiv.style.display = 'block';
+                        winnerDisplayDiv.innerHTML = `🎉 ${winnerName} 🎁 ${selectedPrize}`;
+                        winners.push({ name: winnerName, prize: selectedPrize });
+                        usedNames.add(winnerName);
+                        updateWinnersList();
+                        launchFireworks();
+                    }
+                }
+            }, 1000);
+        }
+
+        function displayMessages(element, messages) {
+            messages.forEach((message, index) => {
+                setTimeout(() => {
+                    element.innerHTML += `<div>${message}</div>`;
+                    launchHearts();
+                }, index * 3000); // 3 ثواني بين الرسائل
+            });
+        }
+
+        function updateWinnersList() {
+            const winnersListDiv = document.getElementById('winnersList');
+            winnersListDiv.innerHTML = '';
+            winners.forEach((winner, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${index + 1}. ${winner.name} - ${winner.prize}`;
+                winnersListDiv.appendChild(listItem);
+            });
+        }
+
+        function launchFireworks() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+            });
+        }
+
+        function launchHearts() {
+            const duration = 1000;
+            const animationEnd = Date.now() + duration;
+            const interval = setInterval(() => {
+                if (Date.now() > animationEnd) {
+                    clearInterval(interval);
+                    return;
+                }
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#ff0048'],
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#ff0048'],
+                });
+            }, 250);
+        }
+
+        function downloadWinners() {
+            const blob = new Blob(
+                [winners.map(w => `${w.name} - ${w.prize}`).join('\n')],
+                { type: 'text/plain;charset=utf-8' }
+            );
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'winners.txt';
+            link.click();
+        }
+    </script>
+</body>
+</html>
